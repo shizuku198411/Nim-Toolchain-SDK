@@ -1,0 +1,24 @@
+.vscode/
+
+# SDKcraft build artifacts
+*.sdk
+
+# SDKcraft local state / logs
+*.log
+.sdkcraft/
+parts/
+stage/
+prime/
+
+# Spread / test runtime artifacts
+.spread/
+spread-*.log
+.spread-*.yaml
+
+# Editor / OS noise
+*~
+*.swp
+*.swo
+.DS_Store
+
+.workshop.lock

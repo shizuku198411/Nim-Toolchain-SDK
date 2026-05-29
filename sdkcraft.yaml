@@ -1,0 +1,11 @@
+name: nim-toolchain
+version: "2.2.10"
+summary: The Nim programming language
+description: |
+  This SDK provides the Nim programming language toolchain,
+  including Nim and nimble, for building, testing, and running
+  Nim projects inside workshops.
+license: MIT
+platforms:          # The platforms this SDK should be built on and run on
+  ubuntu@24.04:amd64:
+  ubuntu@24.04:arm64:

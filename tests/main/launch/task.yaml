@@ -1,0 +1,31 @@
+summary: Launch workshop with nim SDK
+
+prepare: |
+  set -eux
+  envsubst '${BASE}' <workshop.yaml.in >workshop.yaml
+  cat workshop.yaml
+  workshop launch --verbose
+
+restore: |
+  workshop remove || true
+
+execute: |
+  workshop exec -- nim --version
+  workshop exec -- nimble --version
+
+debug: |
+  set -eux
+  pwd
+  ls -la
+  cat workshop.yaml || true
+
+  workshop list || true
+  workshop changes || true
+  workshop tasks || true
+
+  snap list || true
+  snap services || true
+  lxc info || true
+  lxc storage list || true
+  lxc image list --all-projects || true
+  journalctl -u snap.workshop.workshopd.service --no-pager -n 300 || true

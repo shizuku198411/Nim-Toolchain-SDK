@@ -1,0 +1,37 @@
+NIM_VERSION="2.2.10"
+NIM_ARCH="$(uname -m)"
+
+case "$NIM_ARCH" in
+  x86_64|amd64)
+    NIM_PLATFORM="linux_x64"
+    ;;
+  aarch64|arm64)
+    NIM_PLATFORM="linux_arm64"
+    ;;
+  *)
+    echo "unsupported architecture for Nim binary: ${NIM_ARCH}" >&2
+    exit 1
+    ;;
+esac
+
+NIM_DIR="$HOME/nim-${NIM_VERSION}"
+NIM_TARBALL="nim-${NIM_VERSION}-${NIM_PLATFORM}.tar.xz"
+NIM_URL="https://nim-lang.org/download/${NIM_TARBALL}"
+PROJECT_DIR="/project"
+
+if [ ! -x "${NIM_DIR}/bin/nim" ]; then
+  cd "$HOME" || exit 1
+  curl -L "$NIM_URL" -o "$NIM_TARBALL"
+  tar -xf "$NIM_TARBALL"
+fi
+
+cd "$PROJECT_DIR" || exit 1
+
+# == expose nim commands ==
+mkdir -p "$HOME/.local/bin"
+
+for cmd in nim nimble nimsuggest; do
+  if [ -x "${NIM_DIR}/bin/${cmd}" ]; then
+    ln -sfn "${NIM_DIR}/bin/${cmd}" "$HOME/.local/bin/${cmd}"
+  fi
+done
