@@ -42,6 +42,11 @@ jobs:
           fi
         env:
           WORKSHOP_TOKEN: ${{ secrets.WORKSHOP_TOKEN }}
+      
+      - name: sdkcraft try
+        run: |
+          sudo snap install --classic sdkcraft
+          sdkcraft try
 
       - name: Workshop Checkout
         if: ${{ !env.ACT }}
@@ -49,8 +54,3 @@ jobs:
         with:
           token: ${{ secrets.WORKSHOP_TOKEN }}
           workshop: nim-toolchain-test
-      
-      - name: sdkcraft try
-        run: |
-          sudo snap install --classic sdkcraft
-          sdkcraft try
