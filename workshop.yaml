@@ -1,0 +1,5 @@
+name: nim-toolchain-test
+base: ubuntu@24.04
+
+sdks:
+  - name: try-nim-toolchain

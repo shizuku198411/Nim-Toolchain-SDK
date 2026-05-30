@@ -30,7 +30,7 @@ cd "$PROJECT_DIR" || exit 1
 # == expose nim commands ==
 mkdir -p "$HOME/.local/bin"
 
-for cmd in nim nimble nimsuggest; do
+for cmd in nim nimble nimsuggest nimpretty atlas nim-gdb nim_dbg nimgrep testament; do
   if [ -x "${NIM_DIR}/bin/${cmd}" ]; then
     ln -sfn "${NIM_DIR}/bin/${cmd}" "$HOME/.local/bin/${cmd}"
   fi
