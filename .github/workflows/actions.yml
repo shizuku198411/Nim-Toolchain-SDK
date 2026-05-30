@@ -77,4 +77,4 @@ jobs:
       
       - name: Try SDK
         run: |
-          workshop run nim-toolchain-try -- check-versions
+          sg lxd -c 'workshop run nim-toolchain-try -- check-versions'

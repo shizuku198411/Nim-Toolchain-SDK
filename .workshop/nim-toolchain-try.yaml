@@ -7,13 +7,28 @@ sdks:
 actions:
   check-versions: |
     set -eux
+
+    echo "== PATH =="
+    echo "$PATH"
+
+    echo "== commands =="
+    command -v nim
+    command -v nimble
+    command -v nimpretty
+    command -v nimgrep
+    command -v nim-gdb
+
     echo "== nim =="
     nim --version
+
     echo "== nimble =="
     nimble --version
+
     echo "== nimpretty =="
     nimpretty --version
-    echo "== nimgrep --version =="
+
+    echo "== nimgrep =="
     nimgrep --version
+
     echo "== nim-gdb =="
     nim-gdb --version
