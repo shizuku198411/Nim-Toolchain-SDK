@@ -43,15 +43,17 @@ jobs:
         env:
           WORKSHOP_TOKEN: ${{ secrets.WORKSHOP_TOKEN }}
       
-      - name: sdkcraft try
-        run: |
-          sudo snap install --channel=6/stable lxd
-          sudo snap install --classic sdkcraft
-          sdkcraft try
-
-      - name: Workshop Checkout
+      - name: Launch workshop
         if: ${{ !env.ACT }}
         uses: canonical/launch-workshop@v0
         with:
           token: ${{ secrets.WORKSHOP_TOKEN }}
-          workshop: nim-toolchain-test
+          workshop: nim-toolchain-base
+      
+      - name: Install sdkcraft
+        run: |
+          sudo snap install --classic sdkcraft
+          sdkcraft --version
+      
+      - name: sdkcraft try
+        run: sdkcraft try
