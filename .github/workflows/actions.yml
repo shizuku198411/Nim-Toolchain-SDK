@@ -62,7 +62,7 @@ jobs:
           sdkcraft --version
 
       - name: sdkcraft try
-        run: sdkcraft try
+        run: sg lxd -c 'sdkcraft try'
 
       - name: Launch workshop
         uses: canonical/launch-workshop@v0
