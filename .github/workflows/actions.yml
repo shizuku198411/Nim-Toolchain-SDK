@@ -43,18 +43,11 @@ jobs:
         env:
           WORKSHOP_TOKEN: ${{ secrets.WORKSHOP_TOKEN }}
 
-      - name: Setup LXD
-        run: |
-          sudo snap install --channel=6/stable lxd
-          sudo snap refresh --hold=24h lxd
-          sudo lxd waitready
-          sudo lxd init --auto
-
-          sudo usermod -aG lxd "$USER"
-
-          # Check through the lxd group because GitHub Actions does not reload
-          # group membership automatically between commands.
-          sg lxd -c 'lxc profile show default'
+      - name: Launch workshop
+        uses: canonical/launch-workshop@v0
+        with:
+          token: ${{ secrets.WORKSHOP_TOKEN }}
+          workshop: nim-toolchain-base
 
       - name: Install sdkcraft
         run: |
@@ -63,9 +56,3 @@ jobs:
 
       - name: sdkcraft try
         run: sg lxd -c 'sdkcraft try'
-
-      - name: Launch workshop
-        uses: canonical/launch-workshop@v0
-        with:
-          token: ${{ secrets.WORKSHOP_TOKEN }}
-          workshop: nim-toolchain-try
