@@ -1,0 +1,80 @@
+name: SDK Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-sdkcraft:
+    name: sdkcraft test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      
+      - name: Check WORKSHOP_TOKEN
+        shell: bash
+        run: |
+          if [ -z "${WORKSHOP_TOKEN}" ]; then
+            echo "WORKSHOP_TOKEN is empty"
+            exit 1
+          fi
+          echo "WORKSHOP_TOKEN is set"
+        env:
+          WORKSHOP_TOKEN: ${{ secrets.WORKSHOP_TOKEN }}
+      
+      - name: Check token access to canonical/workshop
+        if: ${{ !env.ACT }}
+        shell: bash
+        run: |
+          status="$(
+            curl -sS -o /tmp/workshop-repo.json -w '%{http_code}' \
+              -H "Authorization: Bearer ${WORKSHOP_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/canonical/workshop
+          )"
+          echo "GitHub API status: ${status}"
+          if [ "${status}" != "200" ]; then
+            cat /tmp/workshop-repo.json
+            exit 1
+          fi
+        env:
+          WORKSHOP_TOKEN: ${{ secrets.WORKSHOP_TOKEN }}
+
+      - name: Setup LXD
+        run: |
+          sudo snap install --channel=6/stable lxd
+          sudo snap refresh --hold=24h lxd
+          sudo lxd waitready
+          sudo lxd init --auto
+
+          sudo usermod -aG lxd "$USER"
+
+          # Check through the lxd group because GitHub Actions does not reload
+          # group membership automatically between commands.
+          sg lxd -c 'lxc profile show default'
+
+      - name: Install sdkcraft
+        run: |
+          sudo snap install --classic sdkcraft
+          sdkcraft --version
+
+      - name: sdkcraft try
+        run: |
+          sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo iptables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+          sudo ip6tables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+          sg lxd -c 'sdkcraft try'
+
+      - name: Launch workshop
+        uses: canonical/launch-workshop@v0
+        with:
+          token: ${{ secrets.WORKSHOP_TOKEN }}
+          workshop: nim-toolchain-try
+      
+      - name: Try SDK
+        run: |
+          workshop run nim-toolchain-try -- check-versions

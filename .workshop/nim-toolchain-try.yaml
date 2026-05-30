@@ -1,0 +1,21 @@
+name: nim-toolchain-try
+base: ubuntu@24.04
+
+sdks:
+  - name: try-nim-toolchain
+
+actions:
+  check-versions: |
+    set -eux
+
+    command -v nim
+    command -v nimble
+    command -v nimpretty
+    command -v nimgrep
+    command -v nim-gdb
+
+    nim --version
+    nimble --version
+    nimpretty --version
+    nimgrep --version
+    nim-gdb --version
