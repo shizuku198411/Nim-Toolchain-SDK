@@ -3,3 +3,17 @@ base: ubuntu@24.04
 
 sdks:
   - name: try-nim-toolchain
+
+actions:
+  check-versions: |
+    set -eux
+    echo "== nim =="
+    nim --version
+    echo "== nimble =="
+    nimble --version
+    echo "== nimpretty =="
+    nimpretty --version
+    echo "== nimgrep --version =="
+    nimgrep --version
+    echo "== nim-gdb =="
+    nim-gdb --version

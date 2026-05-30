@@ -74,3 +74,7 @@ jobs:
         with:
           token: ${{ secrets.WORKSHOP_TOKEN }}
           workshop: nim-toolchain-try
+      
+      - name: Try SDK
+        run: |
+          workshop run nim-toolchain-try -- check-versions
