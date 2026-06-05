@@ -79,16 +79,17 @@ The SDK downloads the upstream Nim binary archive based on the workshop architec
 
 The installed commands are exposed through `$HOME/.local/bin`, which is already included in the default Workshop user `PATH`.
 
-## Local development
+## Local development & tests
+
+before execute `sdkcraft`, allow `lxdbr0` traffic.
+```bash
+sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+sudo iptables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+sudo ip6tables -I DOCKER-USER -i lxdbr0 -j ACCEPT
+sudo ip6tables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+```
 
 To build and test the SDK locally, use `sdkcraft`.
-
-Pack the SDK:
-
-```bash
-sdkcraft clean
-sdkcraft pack
-```
 
 Try the SDK locally:
 
@@ -97,23 +98,21 @@ sdkcraft clean
 sdkcraft try
 ```
 
-Then use the local try SDK in a workshop definition:
-
-```yaml
-name: nim-local-test
-base: ubuntu@24.04
-
-sdks:
-  - name: try-nim-toolchain
-```
-
 Launch and verify:
 
 ```bash
 workshop launch --verbose --wait-on-error
-workshop exec -- nim --version
-workshop exec -- nimble --version
+workshop run -- check-versions
+workshop remove
 ```
+
+Pack the SDK:
+
+```bash
+sdkcraft clean
+sdkcraft pack
+```
+
 
 ## Repository layout
 
