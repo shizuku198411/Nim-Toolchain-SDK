@@ -1,5 +1,14 @@
+if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+  sed -i -E 's/^Components: .*/Components: main restricted universe multiverse/' \
+    /etc/apt/sources.list.d/ubuntu.sources
+else
+  sed -i -E 's/^deb (.*) main(.*)$/deb \1 main restricted universe multiverse\2/' \
+    /etc/apt/sources.list
+fi
+
 apt-get update
-apt-get install -y \
+
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
   ca-certificates \
   curl \
   git \
