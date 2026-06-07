@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 NIM_VERSION="2.2.10"
 NIM_ARCH="$(uname -m)"
 
