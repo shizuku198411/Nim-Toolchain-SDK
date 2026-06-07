@@ -81,8 +81,10 @@ The installed commands are exposed through `$HOME/.local/bin`, which is already 
 
 ## Local development & tests
 
-before execute `sdkcraft`, allow `lxdbr0` traffic.
+if you already install docker on host, before execute `sdkcraft` and `workshop` to allow `lxdbr0` and `workshopbr0` traffic.
 ```bash
+sudo nft insert rule ip filter DOCKER-USER iifname workshopbr0 accept
+sudo nft insert rule ip filter DOCKER-USER oifname workshopbr0 ct state related,established accept
 sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
 sudo iptables -I DOCKER-USER -o lxdbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 sudo ip6tables -I DOCKER-USER -i lxdbr0 -j ACCEPT

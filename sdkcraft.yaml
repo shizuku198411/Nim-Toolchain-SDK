@@ -5,7 +5,9 @@ description: |
   This SDK provides the Nim programming language toolchain,
   including Nim and nimble, for building, testing, and running
   Nim projects inside workshops.
+
+  GitHub: https://github.com/shizuku198411/Nim-Toolchain-SDK
 license: MIT
-platforms:          # The platforms this SDK should be built on and run on
+platforms:
   ubuntu@24.04:amd64:
   ubuntu@24.04:arm64:
